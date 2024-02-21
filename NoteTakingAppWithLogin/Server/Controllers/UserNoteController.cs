@@ -29,8 +29,77 @@ namespace NoteTakingAppWithLogin.Server.Controllers
 
             if(user == null)
                  return NotFound();
+            
             return Ok(user.UserNotes);
            
+        }
+
+        // FOR GETTING A GAME FROM THE DATABASE TO EDIT IN EDIT PAGE
+        [HttpGet("{id}")]
+        public async Task<ActionResult<List<UserNote>>> GetNote(int id)
+        {
+            var dbNote = await _context.UserNotes.FindAsync(id); // firstly, we get the note from database
+            if (dbNote == null)
+            {
+                return NotFound("This note does not exist");
+            }
+
+
+            return Ok(dbNote);
+        }
+
+        // FOR ADDING A GAME
+        [HttpPost]
+        public async Task<ActionResult<List<UserNote>>> AddNotes(UserNote note)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier); // Get the current user's ID from claims
+            note.ApplicationUserId = userId; // Set the ApplicationUserId
+
+            _context.UserNotes.Add(note);
+            await _context.SaveChangesAsync();
+
+
+            return await GetAllUserNotes();
+        }
+
+        [HttpPut("{id}")]
+
+        // FOR UPDATING A NOTE
+        public async Task<ActionResult<List<UserNote>>> UpdateNotes(int id, UserNote note)
+        {
+            var dbNote = await _context.UserNotes.FindAsync(id); // firstly, we get the note from database
+            if (dbNote == null)
+            {
+                return NotFound("This note does not exist");
+            }
+
+            dbNote.Title = note.Title;
+            dbNote.Content = note.Content;
+            dbNote.Tag = note.Tag;
+            dbNote.ReleaseDate = note.ReleaseDate;
+
+
+
+            await _context.SaveChangesAsync();
+
+
+            return await GetAllUserNotes();
+        }
+
+        // FOR DELETING A NOTE
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<List<UserNote>>> DeleteNotes(int id)
+        {
+            var dbNote = await _context.UserNotes.FindAsync(id); // firstly, we get the note from database
+            if (dbNote == null)
+            {
+                return NotFound("This note does not exist");
+            }
+
+            _context.UserNotes.Remove(dbNote);
+            await _context.SaveChangesAsync();
+
+            return await GetAllUserNotes();
         }
     }
 }

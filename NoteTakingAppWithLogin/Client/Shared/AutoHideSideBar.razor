@@ -1,0 +1,23 @@
+﻿<div class="container @(isExpanded ? "expand" : "collapse")" @onmouseenter="ExpandSideBar" @onmouseleave="CollapseSideBar">
+    
+    <NavLink class="menu-item">
+        <span class="oi oi-home menu-icon">
+            <span class="menu-name">
+                HOME
+            </span>
+        </span>
+    </NavLink>
+</div>
+
+@code {
+    bool isExpanded;
+    private void ExpandSideBar()
+    {
+        isExpanded = true;
+    }
+
+    private void CollapseSideBar()
+    {
+        isExpanded = false;
+    }
+}

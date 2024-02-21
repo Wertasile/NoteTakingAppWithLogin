@@ -1,0 +1,98 @@
+﻿@page "/note"
+@page "/note/{id:int}"
+@using NoteTakingAppWithLogin.Shared
+@inject HttpClient Http
+@inject NavigationManager NavigationManager
+
+@if (Id is null)
+{
+    <PageTitle>ADD NEW NOTE</PageTitle>
+    <h3>ADD NEW NOTE</h3>
+}
+else
+{
+    <PageTitle>EDIT NOTE</PageTitle>
+    <h3>EDIT NOTE</h3>
+}
+
+<EditForm Model="@note" OnValidSubmit="HandleSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div id="editnoteheader">
+
+
+        <div>
+            <InputText class="editnoteheader-properties form-control" @bind-Value="note.Title" placeholder="Enter Title.."></InputText>
+        </div>
+
+        <div>
+            <InputSelect class="editnoteheader-properties form-control" @bind-Value="note.Tag" placeholder="Select Tag..">
+                <option value="">SELECT TAG</option> @*DEFAULT VALUE*@
+                <option value="Education">Education</option>
+                <option value="Sports">Sports</option>
+                <option value="Personal">Personal</option>
+                <option value="Family">Family</option>
+            </InputSelect>
+        </div>
+
+    </div>
+    <div>
+        <InputTextArea id="editnotemiddle" @bind-Value="note.Content" class="form-control" placeholder="Enter note content....."></InputTextArea>
+    </div>
+
+    <button type="submit" class="btn btn-primary">SAVE</button>
+    @if (Id is not null)
+    {
+        <button type="button" class="btn btn-danger" @onclick="DeleteNote">DELETE</button>
+    }
+    <button class="btn btn-secondary" @onclick="GoHome">CANCEL</button>
+
+</EditForm>
+
+
+@code {
+    [Parameter]
+    public int? Id { get; set; }
+
+    UserNote note = new UserNote { Title = "Enter Note", Content = "Enter Note Description", Tag = "Enter Tag" };
+
+    // LIFECYCLE METHOD TO GET THE VIDEOGAME (WE REQUIRE THIS WHEN WE WANT TO EDIT AN EXISTING NOTE) . IT IS THE SAME LOGIC/ REASONING AS ONINITIALISEDASYNC ON HOME PAGE, CUZ EDIT PAGE INITIALISES WITH PARAMETERS
+    protected override async Task OnParametersSetAsync()
+    {
+        if (Id is not null)
+        {
+            var result = await Http.GetFromJsonAsync<UserNote>($"api/usernote/{Id}");
+            if (result is not null)
+            {
+                note = result;
+            }
+        }
+    }
+
+    async Task HandleSubmit()
+    {
+        if (Id is null)
+        {
+            await Http.PostAsJsonAsync("api/usernote", note);
+
+        }
+        else
+        {
+            await Http.PutAsJsonAsync($"api/usernote/{Id}", note);
+
+        }
+        NavigationManager.NavigateTo("/");
+    }
+
+    async Task DeleteNote()
+    {
+        await Http.DeleteAsync($"api/usernote/{Id}");
+        NavigationManager.NavigateTo("/");
+    }
+
+    public void GoHome()
+    {
+        NavigationManager.NavigateTo("/");
+    }
+}

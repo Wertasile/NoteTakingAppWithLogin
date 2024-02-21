@@ -2,6 +2,12 @@
 
 html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    background-color: #0B1502;
+}
+
+html{
+    min-height: 100vh;
+     
 }
 
 h1:focus {
@@ -36,6 +42,36 @@ a, .btn-link {
 
 .validation-message {
     color: red;
+}
+
+/* ------------------------------------------------------------------NOTEHOME PAGE --------------------------------------------------------------------------------*/
+.note-container {
+    display: grid;
+    gap: 10px;
+    grid-template-columns: repeat(auto-fill,minmax(400px,1fr));
+    width: 100%;
+}
+
+.note-summary {
+    background-color: #393E46;
+    border-width: 2px;
+    border-radius: 20px;
+    border-style: solid;
+}
+
+#top-note-summary {
+}
+
+#middle-note-summary {
+    height: 150px;
+    overflow-y: scroll;
+}
+
+
+#bottom-note-summary {
+    display: flex;
+    justify-content: space-between;
+    font-weight: 300;
 }
 
 #blazor-error-ui {
