@@ -52,11 +52,20 @@ namespace NoteTakingAppWithLogin.Server.Controllers
         [HttpPost]
         public async Task<ActionResult<List<UserNote>>> AddNotes(UserNote note)
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier); // Get the current user's ID from claims
-            note.ApplicationUserId = userId; // Set the ApplicationUserId
 
-            _context.UserNotes.Add(note);
-            await _context.SaveChangesAsync();
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            // Construct the SQL command to insert values into UserNotes, including ApplicationUserId
+            string sqlCommand = "INSERT INTO UserNotes (Title, Content, Tag, ReleaseDate, ApplicationUserId) " +
+                                "VALUES ({0}, {1}, {2}, {3}, '" + userId + "')";
+
+            // Execute the SQL command
+            await _context.Database.ExecuteSqlRawAsync(sqlCommand,
+                note.Title, note.Content, note.Tag, note.ReleaseDate);
+
+            //_context.UserNotes.Add(note);
+            
+            //await _context.SaveChangesAsync();
 
 
             return await GetAllUserNotes();
