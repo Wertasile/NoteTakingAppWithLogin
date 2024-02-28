@@ -1,15 +1,16 @@
-﻿.container{
+﻿.sidebar {
     display: flex;
     flex-direction: column;
-    background-color : black;
-    width : 6rem;
+    color: white;
+    width: 6rem;
     padding: 1rem;
-    border-radius: 0 10px 10px 0;
-    opacity: 0.2;
+    border-radius: 0 0px 10px 0;
+    background-color: #141414;
+    
 }
 
 .expand{
-    width: 8rem;
+    width: 10rem;
 }
 
 .collapse {
@@ -18,7 +19,6 @@
 
 .menu-icon {
     color: white;
-    opacity: 1;
 }
 
 .menu-name {
@@ -26,24 +26,42 @@
     visibility: hidden;
     position: absolute;
     margin-left: 0.5rem;
-    opacity: 1;
 }
 
 .expand .menu-name{
     visibility: visible;
 }
 
-.menu-item:hover .menu-name{
+.add-item {
+    color: #fff;
+    background-color: #eb4034;
+    border-radius: 10px;
+    padding: 8px 8px 8px 0px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+.sidebar-item {
+    padding: 8px 8px 8px 0px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+.sidebar-item:hover {
+    background-color: #333333;
+    border-radius: 10px;
     
-    transform: scale(1.2);
+}
+.menu-item:hover{
+    
+    /*transform: scale(1.2);
     transition: transform 0.5s ease;
     opacity: 1;
-    transform-origin: left center;
+    transform-origin: left center;*/
+
 }
 
+/*
 .menu-item:hover .menu-icon {
     
     transform: scale(1.2);
     transition: transform 0.5s ease;
     opacity: 1;
 }
+    */

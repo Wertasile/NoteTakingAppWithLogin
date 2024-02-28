@@ -1,0 +1,21 @@
+﻿
+
+#editnote-header {
+    display: grid;
+    grid-template-columns: 3fr 1fr;
+    gap:1em;
+    margin: 10px 0px 10px 0px;
+}
+
+.editnote-header-properties {
+
+}
+
+#editnote-middle{
+    
+}
+
+#editnote-bottom{
+
+}
+

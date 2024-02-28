@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using NoteTakingAppWithLogin.Client;
+using Toolbelt.Blazor.Extensions.DependencyInjection;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
@@ -14,5 +15,7 @@ builder.Services.AddHttpClient("NoteTakingAppWithLogin.ServerAPI", client => cli
 builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>().CreateClient("NoteTakingAppWithLogin.ServerAPI"));
 
 builder.Services.AddApiAuthorization();
+
+builder.Services.AddSpeechSynthesis();
 
 await builder.Build().RunAsync();

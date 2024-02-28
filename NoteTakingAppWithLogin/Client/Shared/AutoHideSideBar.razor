@@ -1,12 +1,36 @@
-﻿<div class="container @(isExpanded ? "expand" : "collapse")" @onmouseenter="ExpandSideBar" @onmouseleave="CollapseSideBar">
-    
-    <NavLink class="menu-item">
-        <span class="oi oi-home menu-icon">
-            <span class="menu-name">
-                HOME
+﻿<div class="sidebar @(isExpanded ? "expand" : "collapse")" @onmouseenter="ExpandSideBar" @onmouseleave="CollapseSideBar">
+    <div class="add-item">
+        <NavLink href="/note" class="menu-item">
+            <span class="oi oi-plus menu-icon">
+                <span class="menu-name">
+                    ADD
+                </span>
             </span>
-        </span>
-    </NavLink>
+        </NavLink>
+    </div>
+    <div class="sidebar-item">
+        <NavLink href="/" class="menu-item">
+            <span class="oi oi-home menu-icon">
+                <span class="menu-name">
+                    HOME
+                </span>
+            </span>
+        </NavLink>
+    </div>
+    <div class="sidebar-item">
+        <NavLink href="tag" class="menu-item">
+            <span class="oi oi-home menu-icon">
+                <span class="menu-name">
+                    TAGS
+                </span>
+            </span>
+        </NavLink>
+    </div>
+    
+    
+    
+
+    
 </div>
 
 @code {

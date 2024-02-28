@@ -3,6 +3,8 @@
 @using NoteTakingAppWithLogin.Shared
 @inject HttpClient Http
 @inject NavigationManager NavigationManager
+@using Toolbelt.Blazor.SpeechSynthesis
+@inject SpeechSynthesis SpeechSynthesis
 
 @if (Id is null)
 {
@@ -14,48 +16,93 @@ else
     <PageTitle>EDIT NOTE</PageTitle>
     <h3>EDIT NOTE</h3>
 }
-
-<EditForm Model="@note" OnValidSubmit="HandleSubmit">
-    <DataAnnotationsValidator />
-    <ValidationSummary />
-
-    <div id="editnoteheader">
+<div id="editpage">
 
 
-        <div>
-            <InputText class="editnoteheader-properties form-control" @bind-Value="note.Title" placeholder="Enter Title.."></InputText>
-        </div>
-
-        <div>
-            <InputSelect class="editnoteheader-properties form-control" @bind-Value="note.Tag" placeholder="Select Tag..">
-                <option value="">SELECT TAG</option> @*DEFAULT VALUE*@
-                <option value="Education">Education</option>
-                <option value="Sports">Sports</option>
-                <option value="Personal">Personal</option>
-                <option value="Family">Family</option>
-            </InputSelect>
-        </div>
-
+    <div class="side-btn-container">
+            <button type="button" class="btn btn-outline-light"><i class="oi oi-caret-left"></i></button>
     </div>
+
     <div>
-        <InputTextArea id="editnotemiddle" @bind-Value="note.Content" class="form-control" placeholder="Enter note content....."></InputTextArea>
+            <EditForm Model="@note" OnValidSubmit="HandleSubmit">
+                <DataAnnotationsValidator />
+                <ValidationSummary />
+
+                <div id="editnote-header">
+
+
+                    <div class="text-row">
+                        <div style="width:90%;">
+                            <InputText class="textbox-customisation" @bind-Value="note.Title" placeholder="Enter Title.."></InputText>
+                        </div>
+                        <div>
+                            <button type="button" class="btn btn-outline-primary" @onclick="ReadTitle">
+                                <i class="oi oi-volume-high"></i>
+                            </button>
+                        </div>
+
+                    </div>
+
+                    <div class="text-row">
+                        <div style="width:90%;">
+                            <InputSelect class="textbox-customisation" @bind-Value="note.Tag" placeholder="Select Tag..">
+                                <option value="">SELECT TAG</option> @*DEFAULT VALUE*@
+                                <option value="Education">Education</option>
+                                <option value="Sports">Sports</option>
+                                <option value="Personal">Personal</option>
+                                <option value="Family">Family</option>
+                            </InputSelect>
+                        </div>
+                        <div>
+                            <button type="button" class="btn btn-outline-primary" @onclick="ReadTag">
+                                <i class="oi oi-volume-high"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="editnote-middle">
+                    <div class="text-row">
+                        <div style="width:90%;">
+                            <InputTextArea @bind-Value="note.Content" class="textbox-customisation" placeholder="Enter note content....."></InputTextArea>
+                        </div>
+                        <div>
+                            <button type="button" class="btn btn-outline-primary" @onclick="ReadContent">
+                                <i class="oi oi-volume-high"></i>
+                            </button>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div id="editnote-bottom">
+                    <button type="submit" class="btn btn-primary"><i class="oi oi-bookmark"></i></button>
+                    @if (Id is not null)
+                    {
+                        <button type="button" class="btn btn-outline-danger" @onclick="DeleteNote"><i class="oi oi-delete"></i></button>
+                    }
+                    
+                </div>
+
+
+            </EditForm>
     </div>
 
-    <button type="submit" class="btn btn-primary">SAVE</button>
-    @if (Id is not null)
-    {
-        <button type="button" class="btn btn-danger" @onclick="DeleteNote">DELETE</button>
-    }
-    <button class="btn btn-secondary" @onclick="GoHome">CANCEL</button>
 
-</EditForm>
-
+    <div class="side-btn-container">
+        <button type="button" class="btn btn-outline-light"><i class="oi oi-caret-right"></i></button>
+    </div>
+    
+</div>
 
 @code {
     [Parameter]
     public int? Id { get; set; }
 
-    UserNote note = new UserNote { Title = "Enter Note", Content = "Enter Note Description", Tag = "Enter Tag" };
+    UserNote note = new UserNote { Title = string.Empty, Content = string.Empty, Tag = string.Empty };
+
+    
 
     // LIFECYCLE METHOD TO GET THE VIDEOGAME (WE REQUIRE THIS WHEN WE WANT TO EDIT AN EXISTING NOTE) . IT IS THE SAME LOGIC/ REASONING AS ONINITIALISEDASYNC ON HOME PAGE, CUZ EDIT PAGE INITIALISES WITH PARAMETERS
     protected override async Task OnParametersSetAsync()
@@ -94,5 +141,20 @@ else
     public void GoHome()
     {
         NavigationManager.NavigateTo("/");
+    }
+
+    public void ReadTitle()
+    {
+        this.SpeechSynthesis.Speak(this.note.Title);
+    }
+
+    public void ReadTag()
+    {
+        this.SpeechSynthesis.Speak(this.note.Tag);
+    }
+
+    public void ReadContent()
+    {
+        this.SpeechSynthesis.Speak(this.note.Content);
     }
 }
