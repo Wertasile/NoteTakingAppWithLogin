@@ -3,7 +3,10 @@
 html, body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     color: white;
-    background-color: #262525;
+    /*background-color: #262525;
+    background: rgb(2,0,36);
+    background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(9,9,121,1) 35%, rgba(0,212,255,1) 100%);*/
+    background-color: #141414;
 }
 
 html{
@@ -15,20 +18,17 @@ h1:focus {
     outline: none;
 }
 
-html {
-    scrollbar-width: thin;
-    scrollbar-color: #777 #555;
-}
+
 
 
 ::-webkit-scrollbar {
-    width: 10px;
-    background-color: #393E46;
+    width: 5px;
+    background-color: gray ;
 }
 
 
 ::-webkit-scrollbar-thumb {
-    background-color: #80e7fa;
+    background-color: #0D64DE;
     border-radius: 25px;
 }
 
@@ -39,8 +39,8 @@ a, .btn-link {
 
 .btn-primary {
     color: #fff;
-    background-color: #eb4034;
-    border-radius:10px;
+    background-color: #0D64DE;
+    border-radius: 10px;
 }
 
 a:hover{
@@ -72,20 +72,24 @@ a:hover{
 .note-container {
     display: grid;
     gap: 10px;
-    grid-template-columns: repeat(auto-fill,minmax(300px,1fr));
+    grid-template-columns: repeat(auto-fill,minmax(250px,1fr));
     width: 100%;
     height:80vh;
     border:solid black 2px;
     overflow-y:scroll;
 }
 
+
+
 .note-summary {
-    background-color: #141414;
+    background-color: #2C2D2F;
     border-radius: 10px;
-    
 }
 
 #top-note-summary {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
 }
 
 #middle-note-summary {
@@ -97,17 +101,15 @@ a:hover{
 
 #bottom-note-summary {
     display: flex;
-    justify-content: space-between;
     justify-content:space-between;
 }
 
 .textbox-customisation {
     padding: 8px;
-    background-color: #35374B;
+    background-color: #2C2D2F;
     border: none;
-    border-bottom: 1px solid #ccc;
     min-width: 100%;
-    color:white;
+    color: white;
 }
 
 .text-row {
@@ -129,7 +131,60 @@ a:hover{
 
 .top-row {
     background-color:#141414;
+    border-bottom: solid 0.5px gray;
 }
+
+.search {
+    width: 100%;
+    position: relative;
+    display: flex;
+    justify-content:space-around;
+}
+
+.searchTerm {
+    width: 80%;
+    border: 1px solid gray;
+    padding: 5px;
+    height: 30px;
+    border-radius: 10px 10px 10px 10px;
+    color: black;
+}
+
+    
+
+/* ------------------------------------------------------------------TAG PAGE --------------------------------------------------------------------------------*/
+
+.main-container {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    column-gap: 30px;
+    
+}
+
+.tag-container {
+    background-color: #141414;
+    border-radius: 10px;
+    padding:8px;
+}
+
+.tag-item {
+    padding:8px;
+    display: flex;
+    justify-content: space-between;
+    max-width:300px;
+    border-radius:10px;
+
+    
+}
+
+    .tag-item:hover {
+        background-color: #333333;
+    }
+
+    .tag-item:focus{
+        background-color:#333333
+    }
+
 
 #blazor-error-ui {
     background: lightyellow;
@@ -192,3 +247,45 @@ a:hover{
     .loading-progress-text:after {
         content: var(--blazor-load-percentage-text, "Loading");
     }
+
+@media (max-width: 640.98px) {
+    .main-container {
+        column-gap: 0px;
+    }
+
+    .top-row{
+        font-size:16px;
+    }
+
+    html, body{
+        font-size:16px;
+    }
+
+    .main-container .note-container {
+        grid-template-columns: repeat(auto-fill,minmax(200px,1fr));
+    }
+}
+
+@media (max-width: 390px) {
+    .main-container {
+        display:flex;
+        flex-direction:column;
+        
+    }
+
+    .main-container div{
+        max-height:47vh;
+    }
+
+    .top-row {
+        font-size: 14px;
+    }
+
+    html, body {
+        font-size: 14px;
+    }
+
+    .main-container .note-container {
+        grid-template-columns: repeat(auto-fill,minmax(200px,1fr));
+    }
+}

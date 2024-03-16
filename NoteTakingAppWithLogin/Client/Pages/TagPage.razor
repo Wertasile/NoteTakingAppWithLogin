@@ -1,0 +1,138 @@
+﻿@page "/tag"
+@using NoteTakingAppWithLogin.Shared
+@inject HttpClient Http
+@inject NavigationManager NavigationManager
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+<PageTitle>NOTEPAD+++</PageTitle>
+
+
+@if (tags.Count <= 0)
+{
+    <p>LOADING........</p>
+}
+else
+{
+
+    @if (TagSelected == string.Empty)
+    {
+        <h2> CLICK ON A TAG</h2>
+    }
+    else
+    {
+        <h2> SELECTED TAG IS : @TagSelected</h2>
+    }
+    
+
+    <div class="main-container">
+        <div class="tag-container">
+            <button class="tag-item btn btn-primary" @onclick="AddTag">
+                ADD TAG
+            </button>
+            <div>
+                @foreach (var tag in tags)
+                {
+                    <div @onclick="(() => ShowNote(tag.TagName))" class="tag-item">
+                        <div>
+                            <div class="">
+                                @tag.TagName
+                            </div>
+                        </div>
+                        <div @onclick="(() => EditTag(tag.Id))">
+                            <i class="oi oi-pencil"></i>
+                        </div>
+                    </div>
+                    
+                    
+                }
+            </div>
+            
+            
+        </div>
+        <div class="note-container">
+
+            
+            @foreach (var note in notes)
+            {
+                if (note.Tag == TagSelected)
+                {
+
+
+                    <div @onclick="(() => EditNote(note.Id))">
+                        <div class="note-summary">
+                        @* <div class="p-3">@game.Id</div> *@
+                        <div id="top-note-summary" class="p-3">
+                            <b>@note.Title</b>
+                        </div>
+                        <div id="middle-note-summary" class="p-3">
+                            @note.Content
+                        </div>
+                        <div id="bottom-note-summary">
+                            <div class="p-3">@note.Tag</div>
+                            <div class="p-3">@note.ReleaseDate.ToString("MM/dd/yyyy")</div>
+                        </div>
+                    </div>
+                </div>
+                }
+            }
+        </div>
+        
+    </div>
+}
+@code {
+    string show = "no";
+
+    string TagSelected = string.Empty;
+
+    List<Tag> tags = new List<Tag>();
+
+    List<UserNote> notes = new List<UserNote>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var resulttag = await Http.GetFromJsonAsync<List<Tag>>("api/tag");
+
+        var user = (await AuthenticationStateProvider.GetAuthenticationStateAsync()).User.Identity;
+        if (user != null && user.IsAuthenticated)
+        {
+            var result = await Http.GetFromJsonAsync<List<UserNote>>("api/usernote");
+            notes = result;
+
+        }
+
+        if (resulttag != null)
+        {
+            tags = resulttag;
+        }
+    }
+
+    void AddTag()
+    {
+        NavigationManager.NavigateTo("/edittag");
+    }
+
+    void EditTag(int Id)
+    {
+        
+        NavigationManager.NavigateTo($"/edittag/{Id}");
+    }
+
+    void ShowNote(string TagName)
+    {
+        TagSelected = TagName;
+
+    }
+
+    void EditNote(int Id)
+    {
+        NavigationManager.NavigateTo($"/note/{Id}");
+    }
+
+    
+
+    
+
+    
+    
+    
+}

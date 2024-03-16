@@ -56,12 +56,12 @@ namespace NoteTakingAppWithLogin.Server.Controllers
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             // Construct the SQL command to insert values into UserNotes, including ApplicationUserId
-            string sqlCommand = "INSERT INTO UserNotes (Title, Content, Tag, ReleaseDate, ApplicationUserId) " +
-                                "VALUES ({0}, {1}, {2}, {3}, '" + userId + "')";
+            string sqlCommand = "INSERT INTO UserNotes (Title, Content, Tag, ReleaseDate, ApplicationUserId, LatestDate) " +
+                                "VALUES ({0}, {1}, {2}, {3}, '" + userId + "',{4})";
 
             // Execute the SQL command
             await _context.Database.ExecuteSqlRawAsync(sqlCommand,
-                note.Title, note.Content, note.Tag, note.ReleaseDate);
+                note.Title, note.Content, note.Tag, note.ReleaseDate, note.LatestDate);
 
             //_context.UserNotes.Add(note);
             
@@ -85,8 +85,8 @@ namespace NoteTakingAppWithLogin.Server.Controllers
             dbNote.Title = note.Title;
             dbNote.Content = note.Content;
             dbNote.Tag = note.Tag;
-            dbNote.ReleaseDate = note.ReleaseDate;
-
+            dbNote.LatestDate = DateTime.UtcNow;
+            dbNote.Favourite = note.Favourite;
 
 
             await _context.SaveChangesAsync();

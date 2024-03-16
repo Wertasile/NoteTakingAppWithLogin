@@ -1,31 +1,61 @@
 ﻿<div class="sidebar @(isExpanded ? "expand" : "collapse")" @onmouseenter="ExpandSideBar" @onmouseleave="CollapseSideBar">
     <div class="add-item">
-        <NavLink href="/note" class="menu-item">
-            <span class="oi oi-plus menu-icon">
-                <span class="menu-name">
-                    ADD
+        <NavLink href="/note">
+            <div class="menu-item">
+                <span class="oi oi-plus menu-icon">
+                    <span class="menu-name">
+                        ADD
+                    </span>
                 </span>
-            </span>
+            </div>
         </NavLink>
     </div>
     <div class="sidebar-item">
-        <NavLink href="/" class="menu-item">
-            <span class="oi oi-home menu-icon">
-                <span class="menu-name">
-                    HOME
+        <NavLink href="/">
+            <div class="menu-item">
+                <span class="oi oi-home menu-icon">
+                    <span class="menu-name">
+                        HOME
+                    </span>
                 </span>
-            </span>
+            </div>
         </NavLink>
     </div>
     <div class="sidebar-item">
-        <NavLink href="tag" class="menu-item">
-            <span class="oi oi-home menu-icon">
-                <span class="menu-name">
-                    TAGS
+        <NavLink href="/tag">
+            <div class="menu-item">
+                <span class="oi oi-tag menu-icon">
+                    <span class="menu-name">
+                        TAGS
+                    </span>
                 </span>
-            </span>
+            </div>
         </NavLink>
     </div>
+    <div class="sidebar-item">
+        <NavLink href="/favourite">
+            <div class="menu-item">
+                <span class="oi oi-star menu-icon">
+                    <span class="menu-name">
+                        FAVOURITES
+                    </span>
+                </span>
+            </div>
+        </NavLink>
+    </div>
+    <div class="sidebar-item">
+        <NavLink href="/search">
+            <div class="menu-item">
+                <span class="oi oi-compass menu-icon">
+                    <span class="menu-name">
+                        SEARCH
+                    </span>
+                </span>
+            </div>
+        </NavLink>
+    </div>
+    
+    
     
     
     

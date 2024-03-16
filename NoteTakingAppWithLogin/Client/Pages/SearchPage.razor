@@ -1,4 +1,4 @@
-﻿@page "/"
+﻿@page "/search"
 @using NoteTakingAppWithLogin.Shared
 @inject HttpClient Http
 @inject NavigationManager NavigationManager
@@ -6,30 +6,33 @@
 
 <PageTitle>NOTEPAD+++</PageTitle>
 
-@if (loggedinstate == "YES"){
-    
-}else{
-    <h2>PLEASE LOG IN</h2>
-}
 
-@if (notes.Count <= 0){
+
+@if (notes.Count <= 0)
+{
     <p>LOADING........</p>
 }
-else{
-    <div>
-        @if (filterstate == "Oldest First"){
-            <button class="btn-primary" @onclick="orderbydescendingreleasedate">Filter: @filterstate</button>
-        }
-        else if (filterstate == "Newest First"){
-            <button class="btn-primary" @onclick="orderbyfavourite">Filter: @filterstate</button>
-        }
-        else if (filterstate == "Favourites First"){
-            <button class="btn-primary" @onclick="orderbyascendingreleasedate">Filter: @filterstate</button>
-        }
-        
-    </div>
+else
+{
+    if (searchState == "TITLE"){
+        <div class="search">
+            <InputText class="searchTerm" @bind-Value="searchQuery" placeholder="search by title"></InputText>
+            <button class="btn-primary" @onclick="searchNotesByTitle"><i class="oi oi-magnifying-glass"></i></button>
+            <button class="btn-primary" @onclick="changeSearchState">TITLE</button>
+        </div>
+    }
+    else if (searchState == "CONTENT"){
+        <div class="search">
+            <InputText class="searchTerm" @bind-Value="searchQuery" placeholder="search by content"></InputText>
+            <button class="btn-primary" @onclick="searchNotesByContent"><i class="oi oi-magnifying-glass"></i></button>
+            <button class="btn-primary" @onclick="changeSearchState">CONTENT</button>
+        </div>
+    }
+
     <div class="note-container p-3">
-        @foreach (var note in notes){
+
+        @foreach (var note in filteredNotes)
+        {
             <div>
                 <div class="note-summary">
                     @* <div class="p-3">@game.Id</div> *@
@@ -56,29 +59,27 @@ else{
                         else
                         {
                             <div class="p-3">@note.LatestDate.ToString("MM/dd/yyyy")</div>
-                        }  
+                        }
+
                     </div>
+
                 </div>
             </div>
+
         }
     </div>
 }
-@code{
+@code {
     List<UserNote> notes = new List<UserNote>();
-    string loggedinstate = "NO";
+
     protected override async Task OnInitializedAsync()
     {
-        var user = (await AuthenticationStateProvider.GetAuthenticationStateAsync()).User.Identity;
-        if (user != null && user.IsAuthenticated)
-        {
-            var result = await Http.GetFromJsonAsync<List<UserNote>>("api/usernote");
-            notes = result.OrderByDescending(o => o.Favourite).ToList();
-            loggedinstate = "YES";
-            filterstate = "Favourites First";
-            Console.WriteLine("USER REPLY: " + user);
-        }
 
+        var result = await Http.GetFromJsonAsync<List<UserNote>>("api/usernote");
+        notes = result;
+        searchState = "TITLE";
     }
+
 
     void AddNote()
     {
@@ -104,36 +105,34 @@ else{
         await Http.PutAsJsonAsync($"api/usernote/{note.Id}", note);
     }
 
-    string filterstate = "";
+    string searchQuery = "";
+    List<UserNote> filteredNotes = new List<UserNote>();
 
-    async Task orderbyascendingreleasedate()
+    string searchState = "";
+
+    void searchNotesByTitle()
     {
-        filterstate = "Oldest First";
-        await Task.Run(() =>
-        {
-            notes = notes.OrderBy(o => o.ReleaseDate).ToList();
-            StateHasChanged();
-        });
+        filteredNotes = notes.Where(note => note.Title.Contains(searchQuery, StringComparison.OrdinalIgnoreCase)).ToList();
     }
 
-    async Task orderbydescendingreleasedate()
+    void searchNotesByContent()
     {
-        filterstate = "Newest First";
-        await Task.Run(() =>
-        {
-            notes = notes.OrderByDescending(o => o.ReleaseDate).ToList();
-            StateHasChanged();
-        });
+        filteredNotes = notes.Where(note => note.Content.Contains(searchQuery, StringComparison.OrdinalIgnoreCase)).ToList();
     }
 
-    async Task orderbyfavourite()
+    async Task changeSearchState()
     {
-        filterstate = "Favourites First";
-        await Task.Run(() =>
-        {
-            notes = notes.OrderByDescending(o => o.Favourite).ToList();
+        if (searchState == "TITLE"){
+            searchState = "CONTENT";
+            searchQuery = "";
             StateHasChanged();
-        });
+        }else if (searchState == "CONTENT")
+        {
+            searchState = "TITLE";
+            StateHasChanged();
+            searchQuery = "";
+        }
     }
 
 }
+

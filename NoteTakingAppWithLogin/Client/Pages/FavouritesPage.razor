@@ -1,0 +1,68 @@
+﻿@page "/favourite"
+@using NoteTakingAppWithLogin.Shared
+@inject HttpClient Http
+@inject NavigationManager NavigationManager
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+<PageTitle>NOTEPAD+++</PageTitle>
+
+@if (notes.Count <= 0)
+{
+    <p>NO FAVOURITES</p>
+}
+else
+{
+    <div class="note-container p-3">
+
+        @foreach (var note in notes)
+        {
+            if (note.Favourite == "Yes")
+            {
+                <div @onclick="(() => EditNote(note.Id))">
+                    <div class="note-summary">
+                    @* <div class="p-3">@game.Id</div> *@
+                    <div id="top-note-summary" class="p-3">
+                        <b>@note.Title</b>
+                    </div>
+                    <div id="middle-note-summary" class="p-3">
+                        @note.Content
+                    </div>
+                    <div id="bottom-note-summary">
+                        <div class="p-3">@note.Tag</div>
+                        <div class="p-3">@note.ReleaseDate.ToString("MM/dd/yyyy")</div>
+                        
+                        
+                    </div>
+                </div>
+            </div>
+            }
+        }
+    </div>
+}
+@code {
+    List<UserNote> notes = new List<UserNote>();
+    
+    protected override async Task OnInitializedAsync()
+    {
+        var user = (await AuthenticationStateProvider.GetAuthenticationStateAsync()).User.Identity;
+        if (user != null && user.IsAuthenticated)
+        {
+            var result = await Http.GetFromJsonAsync<List<UserNote>>("api/usernote");
+            notes = result;
+            
+        }
+
+    }
+
+    void AddNote()
+    {
+        NavigationManager.NavigateTo("/note");
+    }
+
+    void EditNote(int Id)
+    {
+        NavigationManager.NavigateTo($"/note/{Id}");
+    }
+
+}
+

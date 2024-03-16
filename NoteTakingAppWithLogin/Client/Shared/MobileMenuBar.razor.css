@@ -1,0 +1,17 @@
+﻿.menubar {
+    display: flex;
+    flex-direction: row;
+    column-gap: 3px;
+    bottom: 0;
+    color: white;
+    
+    padding: 1rem;
+    border-radius: 10px 0px 0px 0;
+    background-color: #1C1C1C;
+}
+
+@media (min-width: 640.98px) {
+    .menubar {
+        display: none;
+    }
+}

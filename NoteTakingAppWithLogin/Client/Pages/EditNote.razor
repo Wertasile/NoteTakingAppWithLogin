@@ -1,6 +1,10 @@
 ﻿@page "/note"
 @page "/note/{id:int}"
+@using System.Collections.Generic
+@using System.Linq
+@using System.Threading.Tasks
 @using NoteTakingAppWithLogin.Shared
+@using System.Runtime.InteropServices
 @inject HttpClient Http
 @inject NavigationManager NavigationManager
 @using Toolbelt.Blazor.SpeechSynthesis
@@ -46,11 +50,10 @@ else
                     <div class="text-row">
                         <div style="width:90%;">
                             <InputSelect class="textbox-customisation" @bind-Value="note.Tag" placeholder="Select Tag..">
-                                <option value="">SELECT TAG</option> @*DEFAULT VALUE*@
-                                <option value="Education">Education</option>
-                                <option value="Sports">Sports</option>
-                                <option value="Personal">Personal</option>
-                                <option value="Family">Family</option>
+                            @foreach (var tag in tags)
+                            {
+                                <option value="@tag.TagName">@tag.TagName</option>
+                            }
                             </InputSelect>
                         </div>
                         <div>
@@ -82,8 +85,48 @@ else
                     {
                         <button type="button" class="btn btn-outline-danger" @onclick="DeleteNote"><i class="oi oi-delete"></i></button>
                     }
-                    
+                
                 </div>
+
+            <details>
+                <summary>More options</summary>
+                <div>
+                    @*VOICE SELECTION*@
+                    @if (Voices.Any())
+                    {
+                        <p>
+                            Voice:
+                            <select @onchange="OnChangeVoice" style="max-width:100%;">
+                                <option value="@(default(string))">(unset)</option>
+                                @foreach (var voice in Voices.OrderBy(v => v.Lang).ThenBy(v => v.VoiceURI))
+                                {
+                                    <option @key="voice.VoiceIdentity" value="@voice.VoiceIdentity" selected="@(voice.VoiceIdentity == this.VoiceId)">@voice.Name (@voice.Lang)</option>
+                                }
+                            </select>
+                        </p>
+                    }
+
+                    <section>
+                        <h2>Control</h2>
+
+                        <button @onclick="OnClickPauseButton">Pause</button>
+                        <button @onclick="OnClickResumeButton">Resume</button>
+                        <button @onclick="OnClickCancelButton">Cancel</button>
+
+                    </section>
+
+                    <section>
+                        <h2>Voice options</h2>
+                        <div style="display:flex; justify-content:space-between; flex-wrap:wrap;">
+                            <div>Language (BCP47): <input type="text" @bind="Lang" /></div>
+                            <div>Picth: @Pitch.ToString("0.0") <input type="range" min="0.0" max="2.0" step="0.1" @bind="Pitch" /> <button @onclick="(() => this.Pitch = 1.0)">reset</button></div>
+                            <div>Rate: @Rate.ToString("0.0") <input type="range" min="0.1" max="10.0" step="0.1" @bind="Rate" /> <button @onclick="(() => this.Rate = 1.0)">reset</button></div>
+                            <div>Volume: @Volume.ToString("0.0") <input type="range" min="0.0" max="1.0" step="0.1" @bind="Volume" /> <button @onclick="(() => this.Volume = 1.0)">reset</button></div>
+                        </div>
+                    </section>
+
+                </div>
+            </details>
 
 
             </EditForm>
@@ -102,7 +145,17 @@ else
 
     UserNote note = new UserNote { Title = string.Empty, Content = string.Empty, Tag = string.Empty };
 
-    
+    // TAGS FOR POPULATING INPUT SELECT
+    List<Tag> tags = new List<Tag>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var resulttag = await Http.GetFromJsonAsync<List<Tag>>("api/tag");
+        if (resulttag != null)
+        {
+            tags = resulttag;
+        }
+    }
 
     // LIFECYCLE METHOD TO GET THE VIDEOGAME (WE REQUIRE THIS WHEN WE WANT TO EDIT AN EXISTING NOTE) . IT IS THE SAME LOGIC/ REASONING AS ONINITIALISEDASYNC ON HOME PAGE, CUZ EDIT PAGE INITIALISES WITH PARAMETERS
     protected override async Task OnParametersSetAsync()
@@ -114,6 +167,18 @@ else
             {
                 note = result;
             }
+        }
+    }
+
+    protected async override Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            this.Voices = await this.SpeechSynthesis.GetVoicesAsync();
+            this.StateHasChanged();
+
+            this.Voices = await this.SpeechSynthesis.GetVoicesAsync();
+            this.StateHasChanged();
         }
     }
 
@@ -143,18 +208,122 @@ else
         NavigationManager.NavigateTo("/");
     }
 
+    public void ReadContent()
+    {
+        var utterancet = new SpeechSynthesisUtterance
+            {
+                Text = this.note.Content,
+                Lang = "en-US", // BCP 47 language tag
+                Pitch = this.Pitch, // 0.0 ~ 2.0 (Default 1.0)
+                Rate = this.Rate, // 0.1 ~ 10.0 (Default 1.0)
+                Volume = this.Volume // 0.0 ~ 1.0 (Default 1.0)
+                
+            };
+            utterancet.Voice = this.GetVoice();
+        this.SpeechSynthesis.Speak(utterancet); // 👈 Speak!
+    }
+
     public void ReadTitle()
     {
-        this.SpeechSynthesis.Speak(this.note.Title);
+        var utterancet = new SpeechSynthesisUtterance
+            {
+                Text = this.note.Title,
+                Lang = "en-US", // BCP 47 language tag
+                Pitch = this.Pitch, // 0.0 ~ 2.0 (Default 1.0)
+                Rate = this.Rate, // 0.1 ~ 10.0 (Default 1.0)
+                Volume = this.Volume // 0.0 ~ 1.0 (Default 1.0)
+            };
+        this.SpeechSynthesis.Speak(utterancet); // 👈 Speak!
     }
 
     public void ReadTag()
     {
-        this.SpeechSynthesis.Speak(this.note.Tag);
+        var utterancet = new SpeechSynthesisUtterance
+            {
+                Text = this.note.Tag,
+                Lang = "en-US", // BCP 47 language tag
+                Pitch = this.Pitch, // 0.0 ~ 2.0 (Default 1.0)
+                Rate = this.Rate, // 0.1 ~ 10.0 (Default 1.0)
+                Volume = this.Volume // 0.0 ~ 1.0 (Default 1.0)
+                //Voice = this.Voices.FirstOrDefault(v => v.Name.Contains("Haruka"));
+            };
+        this.SpeechSynthesis.Speak(utterancet); // 👈 Speak!
     }
 
-    public void ReadContent()
+
+
+
+    bool isExpanded;
+    void ExpandSpeechSetting()
     {
-        this.SpeechSynthesis.Speak(this.note.Content);
+        isExpanded = true;
     }
+
+    void CollapseSpeechSetting()
+    {
+        isExpanded = false;
+    }
+
+    [SupplyParameterFromQuery, Parameter]
+    public string? Text { get; set; }
+
+    [SupplyParameterFromQuery, Parameter]
+    public string? VoiceId { get; set; }
+
+    [SupplyParameterFromQuery, Parameter]
+    public string? Lang { get; set; }
+
+    private double Pitch = 1.0;
+
+    private double Rate = 1.0;
+
+    private double Volume = 1.0;
+
+    private IEnumerable<SpeechSynthesisVoice> Voices = Enumerable.Empty<SpeechSynthesisVoice>();
+
+    
+
+    
+
+    private bool Available;
+
+
+
+    
+ 
+    
+    private SpeechSynthesisVoice? GetVoice()
+    {
+        return this.Voices.FirstOrDefault(v => v.VoiceIdentity == this.VoiceId);
+    }
+
+    void OnChangeVoice(ChangeEventArgs args)
+    {
+        this.VoiceId = args.Value?.ToString();
+        this.Lang = this.GetVoice()?.Lang ?? "";
+       
+    }
+    
+
+    void OnClickPauseButton()
+    {
+            this.SpeechSynthesis.Pause();  
+    }
+
+    void OnClickResumeButton()
+    {
+  
+            this.SpeechSynthesis.Resume();     
+    }
+
+    void OnClickCancelButton()
+    {
+        this.SpeechSynthesis.Cancel();
+    }
+
+    
+
+    
+}
+
 }

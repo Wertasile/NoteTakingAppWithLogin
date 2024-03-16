@@ -1,11 +1,13 @@
 ﻿@using Microsoft.AspNetCore.Components.Authorization
 @using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+@using NoteTakingAppWithLogin.Shared
 @inject NavigationManager Navigation
+@inject HttpClient Http
+@inject AuthenticationStateProvider AuthenticationStateProvider
 
-
-@* -- TOP Bar *@
 <AuthorizeView>
     <Authorized>
+
         <div>NOTEPAD+++</div>
         <a href="authentication/profile">@context.User.Identity?.Name!</a>
         <button class="nav-link btn btn-link" @onclick="BeginLogOut">LOG OUT</button>
@@ -18,8 +20,30 @@
 </AuthorizeView>
 
 @code{
+
+    
+
     private void BeginLogOut()
     {
         Navigation.NavigateToLogout("authentication/logout");
     }
+
+    
+
+    List<UserNote> notes = new List<UserNote>();
+    
+    protected override async Task OnInitializedAsync()
+    {
+        var user = (await AuthenticationStateProvider.GetAuthenticationStateAsync()).User.Identity;
+        if (user != null && user.IsAuthenticated)
+        {
+            var result = await Http.GetFromJsonAsync<List<UserNote>>("api/usernote");
+            notes = result;
+            
+            Console.WriteLine("USER REPLY: " + user);
+        }
+
+    }
+
+    
 }

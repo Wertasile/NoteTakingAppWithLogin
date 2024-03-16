@@ -1,0 +1,78 @@
+﻿@page "/edittag"
+@page "/edittag/{id:int}"
+@using NoteTakingAppWithLogin.Shared
+@inject HttpClient Http
+@inject NavigationManager NavigationManager
+
+<h3>EditTag</h3>
+
+<div>
+    <EditForm Model="@tag" OnValidSubmit="HandleTagSubmission">
+        <DataAnnotationsValidator/>
+        <ValidationSummary/>
+        <div id="editnote-header">
+
+
+                    <div class="text-row">
+                        <div style="width:90%;">
+                            <InputText class="textbox-customisation" @bind-Value="tag.TagName" placeholder="Enter Title.."></InputText>
+                        </div>
+                        
+
+                    </div>
+        </div>
+        <div id="editnote-bottom">
+            <button type="submit" class="btn btn-primary"><i class="oi oi-bookmark"></i></button>
+            @if (Id is not null)
+            {
+                <button type="button" class="btn btn-outline-danger" @onclick="DeleteNote"><i class="oi oi-delete"></i></button>
+            }
+
+        </div>
+    </EditForm>
+</div>
+
+@code {
+    [Parameter]
+    public int? Id { get; set; }
+
+    Tag tag = new Tag { TagName = string.Empty};
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (Id is not null)
+        {
+            var resultingtag = await Http.GetFromJsonAsync<Tag>($"api/tag/{Id}");
+            if (resultingtag is not null)
+            {
+                tag = resultingtag;
+            }
+        }
+    }
+
+    async Task HandleTagSubmission()
+    {
+        if (Id is null)
+        {
+            await Http.PostAsJsonAsync("api/tag", tag);
+
+        }
+        else
+        {
+            await Http.PutAsJsonAsync($"api/tag/{Id}", tag);
+
+        }
+        NavigationManager.NavigateTo("/tag");
+    }
+
+    async Task DeleteNote()
+    {
+        await Http.DeleteAsync($"api/tag/{Id}");
+        NavigationManager.NavigateTo("/tag");
+    }
+
+    public void GoHome()
+    {
+        NavigationManager.NavigateTo("/");
+    }
+}

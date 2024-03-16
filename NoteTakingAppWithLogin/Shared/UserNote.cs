@@ -19,8 +19,10 @@ namespace NoteTakingAppWithLogin.Shared
         [StringLength(50)]
         public required string Tag { get; set; } = string.Empty;
 
-
+        public string Favourite { get; set; } = string.Empty;
 
         public DateTime ReleaseDate { get; set; } = DateTime.UtcNow;
+
+        public DateTime LatestDate { get; set; } = DateTime.UtcNow;
     }
 }
