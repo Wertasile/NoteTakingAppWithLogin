@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NoteTakingAppWithLogin.Server.Data;
 
@@ -11,9 +12,11 @@ using NoteTakingAppWithLogin.Server.Data;
 namespace NoteTakingAppWithLogin.Server.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240316203439_UserIdforTags")]
+    partial class UserIdforTags
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -373,17 +376,12 @@ namespace NoteTakingAppWithLogin.Server.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("ApplicationUserId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<string>("TagName")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ApplicationUserId");
 
                     b.ToTable("Tags");
                 });
@@ -482,13 +480,6 @@ namespace NoteTakingAppWithLogin.Server.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("NoteTakingAppWithLogin.Shared.Tag", b =>
-                {
-                    b.HasOne("NoteTakingAppWithLogin.Server.Models.ApplicationUser", null)
-                        .WithMany("Tags")
-                        .HasForeignKey("ApplicationUserId");
-                });
-
             modelBuilder.Entity("NoteTakingAppWithLogin.Shared.UserNote", b =>
                 {
                     b.HasOne("NoteTakingAppWithLogin.Server.Models.ApplicationUser", null)
@@ -498,8 +489,6 @@ namespace NoteTakingAppWithLogin.Server.Data.Migrations
 
             modelBuilder.Entity("NoteTakingAppWithLogin.Server.Models.ApplicationUser", b =>
                 {
-                    b.Navigation("Tags");
-
                     b.Navigation("UserNotes");
                 });
 #pragma warning restore 612, 618

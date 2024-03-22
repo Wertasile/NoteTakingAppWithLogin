@@ -20,8 +20,8 @@ namespace NoteTakingAppWithLogin.Server.Controllers
             _context = context;
         }
 
-        // FOR SHOWING ALL THE GAME FROM THE DATABASE IN THE HOME PAGE
-        public async Task<ActionResult<List<UserNote>>> GetAllUserNotes()
+        
+        public async Task<ActionResult<List<UserNote>>> GetAllUserNotes() // FOR SHOWING ALL THE GAME FROM THE DATABASE IN THE HOME PAGE
         {
             var user = await _context.Users
                 .Include(u => u.UserNotes)
@@ -34,8 +34,8 @@ namespace NoteTakingAppWithLogin.Server.Controllers
            
         }
 
-        // FOR GETTING A GAME FROM THE DATABASE TO EDIT IN EDIT PAGE
-        [HttpGet("{id}")]
+        
+        [HttpGet("{id}")]   // FOR GETTING A GAME FROM THE DATABASE TO EDIT IN EDIT PAGE
         public async Task<ActionResult<List<UserNote>>> GetNote(int id)
         {
             var dbNote = await _context.UserNotes.FindAsync(id); // firstly, we get the note from database
@@ -43,8 +43,6 @@ namespace NoteTakingAppWithLogin.Server.Controllers
             {
                 return NotFound("This note does not exist");
             }
-
-
             return Ok(dbNote);
         }
 
@@ -52,21 +50,15 @@ namespace NoteTakingAppWithLogin.Server.Controllers
         [HttpPost]
         public async Task<ActionResult<List<UserNote>>> AddNotes(UserNote note)
         {
-
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             // Construct the SQL command to insert values into UserNotes, including ApplicationUserId
             string sqlCommand = "INSERT INTO UserNotes (Title, Content, Tag, ReleaseDate, ApplicationUserId, LatestDate) " +
                                 "VALUES ({0}, {1}, {2}, {3}, '" + userId + "',{4})";
 
-            // Execute the SQL command
-            await _context.Database.ExecuteSqlRawAsync(sqlCommand,
-                note.Title, note.Content, note.Tag, note.ReleaseDate, note.LatestDate);
-
-            //_context.UserNotes.Add(note);
             
-            //await _context.SaveChangesAsync();
-
+            await _context.Database.ExecuteSqlRawAsync(sqlCommand,
+                note.Title, note.Content, note.Tag, note.ReleaseDate, note.LatestDate); 
 
             return await GetAllUserNotes();
         }
@@ -77,21 +69,13 @@ namespace NoteTakingAppWithLogin.Server.Controllers
         public async Task<ActionResult<List<UserNote>>> UpdateNotes(int id, UserNote note)
         {
             var dbNote = await _context.UserNotes.FindAsync(id); // firstly, we get the note from database
-            if (dbNote == null)
-            {
+            if (dbNote == null){
                 return NotFound("This note does not exist");
             }
 
-            dbNote.Title = note.Title;
-            dbNote.Content = note.Content;
-            dbNote.Tag = note.Tag;
-            dbNote.LatestDate = DateTime.UtcNow;
-            dbNote.Favourite = note.Favourite;
-
+            dbNote.Title = note.Title; dbNote.Content = note.Content; dbNote.Tag = note.Tag; dbNote.LatestDate = DateTime.UtcNow; dbNote.Favourite = note.Favourite;
 
             await _context.SaveChangesAsync();
-
-
             return await GetAllUserNotes();
         }
 
@@ -100,8 +84,7 @@ namespace NoteTakingAppWithLogin.Server.Controllers
         public async Task<ActionResult<List<UserNote>>> DeleteNotes(int id)
         {
             var dbNote = await _context.UserNotes.FindAsync(id); // firstly, we get the note from database
-            if (dbNote == null)
-            {
+            if (dbNote == null){
                 return NotFound("This note does not exist");
             }
 

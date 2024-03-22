@@ -7,29 +7,25 @@
 <PageTitle>NOTEPAD+++</PageTitle>
 
 
-@if (tags.Count <= 0)
-{
-    <p>LOADING........</p>
-}
-else
-{
 
-    @if (TagSelected == string.Empty)
-    {
+
+    @if (TagSelected == string.Empty){
         <h2> CLICK ON A TAG</h2>
     }
-    else
-    {
+    else{
         <h2> SELECTED TAG IS : @TagSelected</h2>
     }
     
-
     <div class="main-container">
         <div class="tag-container">
             <button class="tag-item btn btn-primary" @onclick="AddTag">
                 ADD TAG
             </button>
             <div>
+                @if (tags.Count <= 0){
+                    <p>LOADING........</p>
+}
+                else{
                 @foreach (var tag in tags)
                 {
                     <div @onclick="(() => ShowNote(tag.TagName))" class="tag-item">
@@ -41,23 +37,18 @@ else
                         <div @onclick="(() => EditTag(tag.Id))">
                             <i class="oi oi-pencil"></i>
                         </div>
-                    </div>
-                    
-                    
+                    </div>  
+                }
                 }
             </div>
             
             
         </div>
-        <div class="note-container">
-
-            
+        <div class="note-container"> 
             @foreach (var note in notes)
             {
                 if (note.Tag == TagSelected)
                 {
-
-
                     <div @onclick="(() => EditNote(note.Id))">
                         <div class="note-summary">
                         @* <div class="p-3">@game.Id</div> *@
@@ -78,7 +69,7 @@ else
         </div>
         
     </div>
-}
+
 @code {
     string show = "no";
 
@@ -88,51 +79,34 @@ else
 
     List<UserNote> notes = new List<UserNote>();
 
-    protected override async Task OnInitializedAsync()
-    {
-        var resulttag = await Http.GetFromJsonAsync<List<Tag>>("api/tag");
-
+    protected override async Task OnInitializedAsync(){
         var user = (await AuthenticationStateProvider.GetAuthenticationStateAsync()).User.Identity;
-        if (user != null && user.IsAuthenticated)
-        {
+        
+
+        
+        if (user != null && user.IsAuthenticated){
+            var resulttag = await Http.GetFromJsonAsync<List<Tag>>("api/tag");
             var result = await Http.GetFromJsonAsync<List<UserNote>>("api/usernote");
             notes = result;
-
-        }
-
-        if (resulttag != null)
-        {
             tags = resulttag;
         }
+
+        
     }
 
-    void AddTag()
-    {
+    void AddTag(){
         NavigationManager.NavigateTo("/edittag");
     }
 
-    void EditTag(int Id)
-    {
-        
+    void EditTag(int Id){    
         NavigationManager.NavigateTo($"/edittag/{Id}");
     }
 
-    void ShowNote(string TagName)
-    {
+    void ShowNote(string TagName){
         TagSelected = TagName;
-
     }
 
-    void EditNote(int Id)
-    {
+    void EditNote(int Id){
         NavigationManager.NavigateTo($"/note/{Id}");
-    }
-
-    
-
-    
-
-    
-    
-    
+    }    
 }

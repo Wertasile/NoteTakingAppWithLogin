@@ -20,13 +20,13 @@ else
     <PageTitle>EDIT NOTE</PageTitle>
     <h3>EDIT NOTE</h3>
 }
-<div id="editpage">
+<div>
 
-
+    @*
     <div class="side-btn-container">
             <button type="button" class="btn btn-outline-light"><i class="oi oi-caret-left"></i></button>
     </div>
-
+    *@
     <div>
             <EditForm Model="@note" OnValidSubmit="HandleSubmit">
                 <DataAnnotationsValidator />
@@ -83,7 +83,7 @@ else
                     <button type="submit" class="btn btn-primary"><i class="oi oi-bookmark"></i></button>
                     @if (Id is not null)
                     {
-                        <button type="button" class="btn btn-outline-danger" @onclick="DeleteNote"><i class="oi oi-delete"></i></button>
+                        <button type="button" class="btn btn-danger" @onclick="DeleteNote"><i class="oi oi-delete"></i></button>
                     }
                 
                 </div>
@@ -95,9 +95,9 @@ else
                     @if (Voices.Any())
                     {
                         <p>
-                            Voice:
-                            <select @onchange="OnChangeVoice" style="max-width:100%;">
-                                <option value="@(default(string))">(unset)</option>
+                            
+                            <select class="textbox-customisation" @onchange="OnChangeVoice" style="max-width:100%;">
+                                <option value="@(default(string))">(unset): Select Voice </option>
                                 @foreach (var voice in Voices.OrderBy(v => v.Lang).ThenBy(v => v.VoiceURI))
                                 {
                                     <option @key="voice.VoiceIdentity" value="@voice.VoiceIdentity" selected="@(voice.VoiceIdentity == this.VoiceId)">@voice.Name (@voice.Lang)</option>
@@ -118,7 +118,7 @@ else
                     <section>
                         <h2>Voice options</h2>
                         <div style="display:flex; justify-content:space-between; flex-wrap:wrap;">
-                            <div>Language (BCP47): <input type="text" @bind="Lang" /></div>
+                            <div><input type="text" class="textbox-customisation" @bind="Lang" placeholder="Select Language"/></div>
                             <div>Picth: @Pitch.ToString("0.0") <input type="range" min="0.0" max="2.0" step="0.1" @bind="Pitch" /> <button @onclick="(() => this.Pitch = 1.0)">reset</button></div>
                             <div>Rate: @Rate.ToString("0.0") <input type="range" min="0.1" max="10.0" step="0.1" @bind="Rate" /> <button @onclick="(() => this.Rate = 1.0)">reset</button></div>
                             <div>Volume: @Volume.ToString("0.0") <input type="range" min="0.0" max="1.0" step="0.1" @bind="Volume" /> <button @onclick="(() => this.Volume = 1.0)">reset</button></div>
@@ -132,11 +132,11 @@ else
             </EditForm>
     </div>
 
-
+    @*
     <div class="side-btn-container">
         <button type="button" class="btn btn-outline-light"><i class="oi oi-caret-right"></i></button>
     </div>
-    
+    *@
 </div>
 
 @code {
@@ -233,6 +233,7 @@ else
                 Rate = this.Rate, // 0.1 ~ 10.0 (Default 1.0)
                 Volume = this.Volume // 0.0 ~ 1.0 (Default 1.0)
             };
+        utterancet.Voice = this.GetVoice();
         this.SpeechSynthesis.Speak(utterancet); // 👈 Speak!
     }
 
@@ -247,10 +248,9 @@ else
                 Volume = this.Volume // 0.0 ~ 1.0 (Default 1.0)
                 //Voice = this.Voices.FirstOrDefault(v => v.Name.Contains("Haruka"));
             };
+        utterancet.Voice = this.GetVoice();
         this.SpeechSynthesis.Speak(utterancet); // 👈 Speak!
     }
-
-
 
 
     bool isExpanded;
@@ -281,16 +281,9 @@ else
 
     private IEnumerable<SpeechSynthesisVoice> Voices = Enumerable.Empty<SpeechSynthesisVoice>();
 
-    
-
-    
 
     private bool Available;
 
-
-
-    
- 
     
     private SpeechSynthesisVoice? GetVoice()
     {
@@ -312,7 +305,6 @@ else
 
     void OnClickResumeButton()
     {
-  
             this.SpeechSynthesis.Resume();     
     }
 
@@ -326,4 +318,3 @@ else
     
 }
 
-}

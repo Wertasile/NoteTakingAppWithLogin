@@ -7,10 +7,16 @@
 
 <AuthorizeView>
     <Authorized>
-
-        <div>NOTEPAD+++</div>
-        <a href="authentication/profile">@context.User.Identity?.Name!</a>
-        <button class="nav-link btn btn-link" @onclick="BeginLogOut">LOG OUT</button>
+        
+            <div>
+                <div>NOTEPAD+++</div>
+            </div>
+            <div>
+                <div><a href="authentication/profile">@context.User.Identity?.Name!</a></div>
+                <div><button class="nav-link btn btn-link" @onclick="BeginLogOut">LOG OUT</button></div>
+            </div>
+        
+        
     </Authorized>
     <NotAuthorized>
         <div>NOTEPAD+++</div>

@@ -22,11 +22,19 @@ namespace NoteTakingAppWithLogin.Server.Controllers
         // FOR SHOWING ALL THE TAG FROM THE DATABASE IN THE HOME PAGE
         public async Task<ActionResult<List<Tag>>> GetAllTags()
         {
-            var list = await _context.Tags.ToListAsync();
+            var user = await _context.Users
+                .Include(t => t.Tags)
+                .FirstOrDefaultAsync(t => t.Id == User.FindFirstValue(ClaimTypes.NameIdentifier));  // this means user that is authenticated 
+
+            if (user == null)
+                return NotFound();
+
+            return Ok(user.Tags);
+            //var list = await _context.Tags.ToListAsync();
 
             
 
-            return Ok(list);
+            //return Ok(list);
 
         }
 
@@ -51,13 +59,29 @@ namespace NoteTakingAppWithLogin.Server.Controllers
         [HttpPost]
         public async Task<ActionResult<List<Tag>>> AddTag(Tag tag)
         {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            _context.Tags.Add(tag);
+            // Construct the SQL command to insert values into UserNotes, including ApplicationUserId
+            string sqlCommand = "INSERT INTO Tags (TagName, ApplicationUserId) " +
+                                "VALUES ({0}, '" + userId + "')";
 
-            await _context.SaveChangesAsync();
+            // Execute the SQL command
+            await _context.Database.ExecuteSqlRawAsync(sqlCommand,
+                tag.TagName);
 
-            var list = await _context.Tags.ToListAsync(); 
-            return Ok(list);
+            //_context.UserNotes.Add(note);
+
+            //await _context.SaveChangesAsync();
+
+
+            return await GetAllTags();
+
+            //_context.Tags.Add(tag);
+
+            //await _context.SaveChangesAsync();
+
+            //var list = await _context.Tags.ToListAsync(); 
+            //return Ok(list);
         }
 
         [HttpPut("{id}")]

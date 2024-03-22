@@ -23,12 +23,14 @@ h1:focus {
 
 ::-webkit-scrollbar {
     width: 5px;
-    background-color: gray ;
+    background-color: gray;
+    border-radius: 25px;
 }
 
 
 ::-webkit-scrollbar-thumb {
-    background-color: #0D64DE;
+    background-image: linear-gradient(92.88deg, #455EB5 9.16%, #5643CC 43.89%, #673FD7 64.72%);
+    color: #FFFFFF;
     border-radius: 25px;
 }
 
@@ -36,13 +38,13 @@ a, .btn-link {
     color: white;
     cursor: pointer;
 }
-
+/*
 .btn-primary {
     color: #fff;
     background-color: #0D64DE;
     border-radius: 10px;
 }
-
+*/
 a:hover{
     text-decoration:none;
 }
@@ -68,6 +70,72 @@ a:hover{
     color: red;
 }
 
+
+.btn-primary {
+    background-image: linear-gradient(92.88deg, #455EB5 9.16%, #5643CC 43.89%, #673FD7 64.72%);
+    color: #FFFFFF;
+    border-radius: 8px;
+    border-style: none;
+    box-sizing: border-box;
+    cursor: pointer;
+    flex-shrink: 0;
+    font-family: "Inter UI","SF Pro Display",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen,Ubuntu,Cantarell,"Open Sans","Helvetica Neue",sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    height: 2.5rem;
+    padding: 0 1.6rem;
+    text-align: center;
+    text-shadow: rgba(0, 0, 0, 0.25) 0 3px 8px;
+    transition: all .5s;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    margin-bottom: 10px;
+}
+
+.btn-primary:hover {
+    box-shadow: rgba(80, 63, 205, 0.5) 0 1px 30px;
+    transition-duration: .1s;
+}
+
+@media (min-width: 768px) {
+    .button-36 {
+        padding: 0 2.6rem;
+    }
+}
+
+.btn-danger {
+    color: red;
+    border-radius: 8px;
+    border-style: none;
+    box-sizing: border-box;
+    cursor: pointer;
+    flex-shrink: 0;
+    font-family: "Inter UI","SF Pro Display",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen,Ubuntu,Cantarell,"Open Sans","Helvetica Neue",sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    height: 2.5rem;
+    padding: 0 1.6rem;
+    text-align: center;
+    text-shadow: rgba(0, 0, 0, 0.25) 0 3px 8px;
+    transition: all .5s;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    margin-bottom: 10px;
+}
+
+    .btn-danger:hover {
+        box-shadow: red 0 1px 30px;
+        transition-duration: .1s;
+    }
+
+@media (min-width: 768px) {
+    .btn-danger {
+        padding: 0 2.6rem;
+    }
+}
+
 /* ------------------------------------------------------------------NOTEHOME PAGE --------------------------------------------------------------------------------*/
 .note-container {
     display: grid;
@@ -77,6 +145,8 @@ a:hover{
     height:80vh;
     border:solid black 2px;
     overflow-y:scroll;
+    border-radius:10px;
+    padding: 10px;
 }
 
 
@@ -179,6 +249,7 @@ a:hover{
 
     .tag-item:hover {
         background-color: #333333;
+        cursor:pointer;
     }
 
     .tag-item:focus{

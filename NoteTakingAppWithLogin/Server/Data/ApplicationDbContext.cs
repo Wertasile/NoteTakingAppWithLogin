@@ -15,7 +15,14 @@ namespace NoteTakingAppWithLogin.Server.Data
         {
         }
 
-        public DbSet<UserNote> UserNotes => Set<UserNote>();  //NAME OF TABLE
-        public DbSet<Tag> Tags => Set<Tag>();
+        public DbSet<UserNote> UserNotes => Set<UserNote>();  //USER NOTES TABLE
+        public DbSet<Tag> Tags => Set<Tag>();  // TAGS TABLE
     }
 }
+
+
+
+
+
+
+
