@@ -49,16 +49,25 @@
             {
                 if (note.Tag == TagSelected)
                 {
-                    <div @onclick="(() => EditNote(note.Id))">
+                    <div>
                         <div class="note-summary">
                         @* <div class="p-3">@game.Id</div> *@
                         <div id="top-note-summary" class="p-3">
-                            <b>@note.Title</b>
+                            <b @onclick="(() => EditNote(note.Id))" class="p-3">@note.Title</b>
+                            @if (note.Favourite == "Yes")
+                            {
+                                <div class="p-3" @onclick="(() => unfavourite(note))"> <i class="oi oi-star" style="color:gold;"></i></div>
+                            }
+                            else
+                            {
+                                <div class="p-3" @onclick="(() => favourite(note))"> <i class="oi oi-star" style="color:black;"></i> </div>
+                            }
+
                         </div>
-                        <div id="middle-note-summary" class="p-3">
+                        <div id="middle-note-summary" @onclick="(() => EditNote(note.Id))" class="p-3">
                             @note.Content
                         </div>
-                        <div id="bottom-note-summary">
+                        <div id="bottom-note-summary" @onclick="(() => EditNote(note.Id))">
                             <div class="p-3">@note.Tag</div>
                             <div class="p-3">@note.ReleaseDate.ToString("MM/dd/yyyy")</div>
                         </div>
@@ -108,5 +117,20 @@
 
     void EditNote(int Id){
         NavigationManager.NavigateTo($"/note/{Id}");
-    }    
+    }
+    
+
+    async Task favourite(UserNote note)
+    {
+        note.Favourite = "Yes";
+        Console.WriteLine("TEH NOTE ID IS : " + note.Id);
+        await Http.PutAsJsonAsync($"api/usernote/{note.Id}", note);
+    }
+
+    async Task unfavourite(UserNote note)
+    {
+        note.Favourite = string.Empty;
+        Console.WriteLine("TEH NOTE ID IS : " + note.Id);
+        await Http.PutAsJsonAsync($"api/usernote/{note.Id}", note);
+    }
 }

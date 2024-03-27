@@ -1,6 +1,7 @@
 ﻿.menubar {
     display: flex;
     flex-direction: row;
+    justify-content:space-around;
     column-gap: 3px;
     position:fixed;
     width:100vw;

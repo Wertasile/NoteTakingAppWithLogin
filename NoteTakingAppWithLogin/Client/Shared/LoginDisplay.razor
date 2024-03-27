@@ -11,9 +11,9 @@
             <div>
                 <div>NOTEPAD+++</div>
             </div>
-            <div>
-                <div><a href="authentication/profile">@context.User.Identity?.Name!</a></div>
-                <div><button class="nav-link btn btn-link" @onclick="BeginLogOut">LOG OUT</button></div>
+            <div style="display:flex; flex-direction:row;">
+            <div><button  @onclick="GoToProfile">@context.User.Identity?.Name!</button></div>
+            <div><button  @onclick="BeginLogOut">LOG OUT</button></div>
             </div>
         
         
@@ -27,11 +27,16 @@
 
 @code{
 
-    
+
 
     private void BeginLogOut()
     {
         Navigation.NavigateToLogout("authentication/logout");
+    }
+
+    private void GoToProfile()
+    {
+        Navigation.NavigateTo("authentication/profile");
     }
 
     

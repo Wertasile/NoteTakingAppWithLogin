@@ -21,7 +21,7 @@ namespace NoteTakingAppWithLogin.Server.Controllers
         }
 
         
-        public async Task<ActionResult<List<UserNote>>> GetAllUserNotes() // FOR SHOWING ALL THE GAME FROM THE DATABASE IN THE HOME PAGE
+        public async Task<ActionResult<List<UserNote>>> GetAllUserNotes() // FOR SHOWING ALL THE USERNOTES FROM THE DATABASE IN THE HOME PAGE
         {
             var user = await _context.Users
                 .Include(u => u.UserNotes)
