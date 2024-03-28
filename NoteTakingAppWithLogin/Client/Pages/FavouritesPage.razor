@@ -5,7 +5,7 @@
 @inject AuthenticationStateProvider AuthenticationStateProvider
 
 <PageTitle>NOTEPAD+++</PageTitle>
-
+<h2>FAVOURITES</h2>
 @if (notes.Count <= 0)
 {
     <p>NO FAVOURITES</p>
@@ -18,23 +18,31 @@ else
         {
             if (note.Favourite == "Yes")
             {
-                <div @onclick="(() => EditNote(note.Id))">
-                    <div class="note-summary">
-                    @* <div class="p-3">@game.Id</div> *@
-                    <div id="top-note-summary" class="p-3">
-                        <b>@note.Title</b>
+                <div>
+
+                <div class="note-summary">
+                    <div id="top-note-summary">
+                        <b @onclick="(() => EditNote(note.Id))" class="p-3">@note.Title</b>
+                        
                     </div>
-                    <div id="middle-note-summary" class="p-3">
+                    <div id="middle-note-summary" @onclick="(() => EditNote(note.Id))" class="p-3">
                         @note.Content
                     </div>
-                    <div id="bottom-note-summary">
+                    <div id="bottom-note-summary" @onclick="(() => EditNote(note.Id))">
                         <div class="p-3">@note.Tag</div>
-                        <div class="p-3">@note.ReleaseDate.ToString("MM/dd/yyyy")</div>
-                        
-                        
+                        @if (note.LatestDate.ToString("MM/dd/yyyy") == "01/01/0001")
+                        {
+                            <div class="p-3">@note.ReleaseDate.ToString("MM/dd/yyyy")</div>
+                        }
+                        else
+                        {
+                            <div class="p-3">@note.LatestDate.ToString("MM/dd/yyyy")</div>
+                        }
                     </div>
+                
                 </div>
-            </div>
+
+                </div>
             }
         }
     </div>

@@ -50,6 +50,7 @@ else
                     <div class="text-row">
                         <div style="width:90%;">
                             <InputSelect class="textbox-customisation" @bind-Value="note.Tag" placeholder="Select Tag..">
+                            <option value="" placeholder="Select Tag...">Select Tag</option>
                             @foreach (var tag in tags)
                             {
                                 <option value="@tag.TagName">@tag.TagName</option>
@@ -112,9 +113,9 @@ else
                         <h2>Voice options</h2>
                         <div style="display:flex; justify-content:space-between; flex-wrap:wrap;">
                             <div><input type="text" class="textbox-customisation" @bind="Lang" placeholder="Select Language"/></div>
-                            <div>Picth: @Pitch.ToString("0.0") <input type="range" min="0.0" max="2.0" step="0.1" @bind="Pitch" /> <button class="btn-primary" @onclick="(() => this.Pitch = 1.0)">reset</button></div>
-                            <div>Rate: @Rate.ToString("0.0") <input type="range" min="0.1" max="10.0" step="0.1" @bind="Rate" /> <button class="btn-primary" @onclick="(() => this.Rate = 1.0)">reset</button></div>
-                            <div>Volume: @Volume.ToString("0.0") <input type="range" min="0.0" max="1.0" step="0.1" @bind="Volume" /> <button class="btn-primary" @onclick="(() => this.Volume = 1.0)">reset</button></div>
+                            <div>PITCH: @Pitch.ToString("0.0") <input type="range" min="0.0" max="2.0" step="0.1" @bind="Pitch" /> <button class="btn-primary" @onclick="(() => this.Pitch = 1.0)">reset</button></div>
+                            <div>RATE: @Rate.ToString("0.0") <input type="range" min="0.1" max="10.0" step="0.1" @bind="Rate" /> <button class="btn-primary" @onclick="(() => this.Rate = 1.0)">reset</button></div>
+                            <div>VOLUME: @Volume.ToString("0.0") <input type="range" min="0.0" max="1.0" step="0.1" @bind="Volume" /> <button class="btn-primary" @onclick="(() => this.Volume = 1.0)">reset</button></div>
                         </div>
                     </section>
 
@@ -123,6 +124,8 @@ else
 
 
             </EditForm>
+
+            <div><i>NOTE WAS MADE ON : @note.ReleaseDate</i> </div>
     </div>
 
     @*
@@ -161,6 +164,7 @@ else
                 note = result;
             }
         }
+        
     }
 
     protected async override Task OnAfterRenderAsync(bool firstRender)
@@ -267,11 +271,8 @@ else
     public string? Lang { get; set; }
 
     private double Pitch = 1.0;
-
     private double Rate = 1.0;
-
     private double Volume = 1.0;
-
     private IEnumerable<SpeechSynthesisVoice> Voices = Enumerable.Empty<SpeechSynthesisVoice>();
 
 

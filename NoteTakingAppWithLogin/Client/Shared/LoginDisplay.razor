@@ -9,19 +9,23 @@
     <Authorized>
         
             <div>
-                <div>NOTEPAD+++</div>
+            <div @onclick="GoToHomePage" class="logo"><i class="oi oi-book" style="color:white;"></i><span>NOTEPAD+++</span></div>
             </div>
             <div style="display:flex; flex-direction:row;">
-            <div><button  @onclick="GoToProfile">@context.User.Identity?.Name!</button></div>
-            <div><button  @onclick="BeginLogOut">LOG OUT</button></div>
+            <div><button class="navbar-button" @onclick="GoToProfile">@context.User.Identity?.Name!</button></div>
+            <div><button class="navbar-button" @onclick="BeginLogOut">LOG OUT</button></div>
             </div>
         
         
     </Authorized>
     <NotAuthorized>
-        <div>NOTEPAD+++</div>
-        <a href="authentication/register">REGISTER</a>
-        <a href="authentication/login">LOG IN</a>
+        <div>
+            <div @onclick="GoToHomePage" class="logo"><i class="oi oi-book" style="color:white;"></i><span>NOTEPAD+++</span></div>
+        </div>
+        <div style="display:flex; flex-direction:row;">
+            <div><button class="navbar-button" @onclick="Register">REGISTER</button></div>
+            <div><button class="navbar-button" @onclick="Login">LOG IN</button></div>
+        </div>
     </NotAuthorized>
 </AuthorizeView>
 
@@ -37,6 +41,21 @@
     private void GoToProfile()
     {
         Navigation.NavigateTo("authentication/profile");
+    }
+
+    private void GoToHomePage()
+    {
+        Navigation.NavigateTo("/");
+    }
+
+    private void Login()
+    {
+        Navigation.NavigateTo("authentication/login");
+    }
+
+    private void Register()
+    {
+        Navigation.NavigateTo("authentication/register");
     }
 
     

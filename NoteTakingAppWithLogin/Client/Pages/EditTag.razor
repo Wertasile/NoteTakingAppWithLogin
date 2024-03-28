@@ -4,25 +4,33 @@
 @inject HttpClient Http
 @inject NavigationManager NavigationManager
 
-<h3>EditTag</h3>
+@if (Id is null)
+{
+    <PageTitle>ADD NEW TAG</PageTitle>
+    <h3>ADD NEW TAG</h3>
+}
+else
+{
+    <PageTitle>EDIT TAG</PageTitle>
+}
 
 <div>
     <EditForm Model="@tag" OnValidSubmit="HandleTagSubmission">
         <DataAnnotationsValidator/>
         <ValidationSummary/>
-        <div id="editnote-header">
+        <div id="editnote-header" class="mb-2">
 
 
                     <div class="text-row">
                         <div style="width:90%;">
-                            <InputText class="textbox-customisation" @bind-Value="tag.TagName" placeholder="Enter Title.."></InputText>
+                            <InputText class="textbox-customisation" @bind-Value="tag.TagName" placeholder="Enter Tag.."></InputText>
                         </div>
                         
 
                     </div>
         </div>
-        <div id="editnote-bottom">
-            <button type="submit" class="btn btn-primary"><i class="oi oi-bookmark"></i></button>
+        <div>
+            <button type="submit" class="btn btn-primary"><i class="oi oi-bookmark "></i></button>
             @if (Id is not null)
             {
                 <button type="button" class="btn btn-danger" @onclick="DeleteNote"><i class="oi oi-delete"></i></button>

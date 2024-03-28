@@ -135,6 +135,17 @@ a:hover{
     }
 }
 
+
+.editnote-header-properties {
+}
+
+#editnote-middle {
+}
+
+.editnote-bottom {
+    padding-top: 10px;
+}
+
 /* ------------------------------------------------------------------NOTEHOME PAGE --------------------------------------------------------------------------------*/
 .note-container {
     display: grid;
@@ -344,8 +355,9 @@ a:hover{
         
     }
 
-    .main-container div{
-        max-height:47vh;
+    .note-container{
+        
+        margin-bottom:50px;
     }
 
     .top-row {

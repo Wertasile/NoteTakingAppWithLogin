@@ -111,7 +111,7 @@ else{
         filterstate = "Oldest First";
         await Task.Run(() =>
         {
-            notes = notes.OrderBy(o => o.ReleaseDate).ToList();
+            notes = notes.OrderBy(o => o.LatestDate).ToList();
             StateHasChanged();
         });
     }
@@ -121,7 +121,7 @@ else{
         filterstate = "Newest First";
         await Task.Run(() =>
         {
-            notes = notes.OrderByDescending(o => o.ReleaseDate).ToList();
+            notes = notes.OrderByDescending(o => o.LatestDate).ToList();
             StateHasChanged();
         });
     }

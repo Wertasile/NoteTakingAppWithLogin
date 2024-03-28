@@ -16,14 +16,14 @@ else
 {
     if (searchState == "TITLE"){
         <div class="search">
-            <InputText class="searchTerm" @bind-Value="searchQuery" placeholder="search by title"></InputText>
+            <InputText class="searchTerm" @bind-Value="searchQuery" placeholder="SEARCH BY TITLE"></InputText>
             <button class="btn-primary" @onclick="searchNotesByTitle"><i class="oi oi-magnifying-glass"></i></button>
             <button class="btn-primary" @onclick="changeSearchState">TITLE</button>
         </div>
     }
     else if (searchState == "CONTENT"){
         <div class="search">
-            <InputText class="searchTerm" @bind-Value="searchQuery" placeholder="search by content"></InputText>
+            <InputText class="searchTerm" @bind-Value="searchQuery" placeholder="SEARCH BY CONTENT"></InputText>
             <button class="btn-primary" @onclick="searchNotesByContent"><i class="oi oi-magnifying-glass"></i></button>
             <button class="btn-primary" @onclick="changeSearchState">CONTENT</button>
         </div>

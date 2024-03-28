@@ -42,3 +42,11 @@
         color: #6f6;
     }
 
+
+@media (max-width: 640.98px) {
+    #editnote-header{
+        display:flex;
+        flex-direction:column;
+        gap:10px;
+    }
+}
