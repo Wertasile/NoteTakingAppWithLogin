@@ -17,8 +17,6 @@
 │   │   │   ├── MainLayout.razor.css
 │   │   ├── MobileMenuBar.razor
 │   │   │   ├── AutoHideSidebar.razor
-│   │   ├── AutoHideSidebar.razor
-│   │   │   ├── AutoHideSidebar.razor
 │ 
 ├── NoteTakingAppWithLogin.Server
 │   ├── Controllers
