@@ -31,6 +31,7 @@
 ├── NoteTakingAppWithLogin.Shared
 │   ├── Tag.cs
 │   └── UserNote.cs
-
+│
+│.........
 
 ```
