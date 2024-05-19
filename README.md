@@ -77,8 +77,8 @@
 
 <img src="ImagesREADME/FAVOURITE PAGE MOBILE.png" alt="lsblk" title="lsblk result" width="300"/>
 
-<img src="../ImagesREADME/LOGIN PAGE MOBILE.png" alt="lsblk" title="lsblk result" width="300"/>
+<img src="ImagesREADME/LOGIN PAGE MOBILE.png" alt="lsblk" title="lsblk result" width="300"/>
 
-<img src="../ImagesREADME/REGISTER PAGE MOBILE.png" alt="lsblk" title="lsblk result" width="300"/>
+<img src="ImagesREADME/REGISTER PAGE MOBILE.png" alt="lsblk" title="lsblk result" width="300"/>
 
-<img src="../ImagesREADME/Account Management Page MOBILE.png" alt="lsblk" title="lsblk result" width="300"/>
+<img src="ImagesREADME/Account Management Page MOBILE.png" alt="lsblk" title="lsblk result" width="300"/>
